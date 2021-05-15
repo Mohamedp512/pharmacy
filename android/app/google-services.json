@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1048517445437",
+    "project_id": "safwat-pharmacy",
+    "storage_bucket": "safwat-pharmacy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048517445437:android:cf5c0ae4eafe94290c6754",
+        "android_client_info": {
+          "package_name": "safwat.safwat_pharmacy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048517445437-7pka8dt2anf4u5itk1m5ejhp1gnhglb7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "safwat.safwat_pharmacy",
+            "certificate_hash": "50052646443285b979b70fbf97f8b1d99c882006"
+          }
+        },
+        {
+          "client_id": "1048517445437-sq14lil3blfiu980qa5ng0e5i4i3a3r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDezob3hlWpzR4bipRTiiJx45myGQrBo0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048517445437-sq14lil3blfiu980qa5ng0e5i4i3a3r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

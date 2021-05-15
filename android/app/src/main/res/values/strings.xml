@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">Safwat Pharmacy</string>
+ <string name="facebook_app_id">245765107088053</string>
+ <string name="fb_login_protocol_scheme">fb245765107088053</string>
+
+</resources>
