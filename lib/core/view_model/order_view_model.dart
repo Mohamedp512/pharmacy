@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
+import 'package:safwat_pharmacy/models/address_model.dart';
 import 'package:safwat_pharmacy/models/cart_item_model.dart';
 import 'package:safwat_pharmacy/models/order_model.dart';
 import 'package:safwat_pharmacy/models/review_model.dart';
@@ -26,11 +27,11 @@ class OrderViewModel extends GetxController {
     super.onInit();
 
     //getCurrentUser();
-   // getOrders();
+    // getOrders();
   }
 
   OrderViewModel() {
-    getReviews();
+    // getReviews();
     getOrders();
   }
 
@@ -56,9 +57,12 @@ class OrderViewModel extends GetxController {
         extractedData.forEach((orderId, orderData) {
           _loadedOrder.add(OrderModel(
               id: orderId,
-              address: orderData['address'],
+              address: AddressModel(
+                  address: orderData['address']['address'],
+                  details: orderData['address']['details'],
+                  mobile: orderData['address']['mobile'],
+                  name: orderData['address']['name']),
               dateTime: DateTime.parse(orderData['dateTime']),
-              mobile: orderData['mobile'],
               status: orderData['status'],
               total: double.parse(orderData['total']),
               products: (orderData['products'] as List<dynamic>)
@@ -70,10 +74,14 @@ class OrderViewModel extends GetxController {
                       quantity: int.parse(item['quantity']),
                       currentRating: reviews.length == 0
                           ? 0
-                          :reviews[reviews.indexWhere((rev)=>(rev.orderId==orderId&&rev.productId==item['id']))].rating
-                          /* ((reviews.firstWhere(
+                          : reviews[reviews.indexWhere((rev) =>
+                                      (rev.orderId == orderId &&
+                                          rev.productId == item['id']))]
+                                  .rating
+                              /* ((reviews.firstWhere(
                                       (rev) => (rev.orderId==orderId&&rev.productId == item['id'])))
-                                  .rating) */ ??
+                                  .rating) */
+                              ??
                               0))
                   .toList()));
         });
@@ -85,7 +93,9 @@ class OrderViewModel extends GetxController {
   }
 
   Future<void> addOrder(
-      {List<CartItemModel> cartProducts, String address, double total}) async {
+      {List<CartItemModel> cartProducts,
+      AddressModel address,
+      double total}) async {
     UserModel user = profileController.user;
     String dateTime = DateTime.now().toString();
     String orderId = user.userId.substring(0, 5) +
@@ -94,12 +104,16 @@ class OrderViewModel extends GetxController {
         dateTime.substring(8, 10) +
         dateTime.substring(20);
 
-    print(cartProducts);
     Map<String, dynamic> newOrder = {
       'status': 'InProcess',
-      'address': address,
+      'address': {
+        'address': address.address,
+        'details': address.details,
+        'mobile': address.mobile,
+        'name': address.name
+      },
       'dateTime': DateTime.now().toString(),
-      'mobile': user.mobile,
+      'mobile': address.mobile,
       'total': total.toString(),
       'products': cartProducts
           .map((cp) => {
@@ -112,19 +126,28 @@ class OrderViewModel extends GetxController {
               })
           .toList()
     };
-    _orderRef
+    await _orderRef
         .doc(user.userId)
         .set({orderId: newOrder}, SetOptions(merge: true));
     //
-    print('orrrrrrrrr' + newOrder['products'][0]['id']);
+
     var order = OrderModel(
         address: address,
         dateTime: DateTime.now(),
         id: orderId,
-        mobile: user.mobile,
-        products: cartProducts,
+        mobile: address.mobile,
+        products: cartProducts
+            .map((item) => CartItemModel(
+                img: item.img,
+                currentRating: item.currentRating,
+                name: item.name,
+                price: item.price,
+                productId: item.productId,
+                quantity: item.quantity))
+            .toList(),
         status: 'inProcess',
         total: total);
+
     _orders.insert(0, order);
     _loading.value = false;
     update();
@@ -202,7 +225,6 @@ class OrderViewModel extends GetxController {
 
   addReview(
       {CartItemModel product, String orderId, int rate, String notes}) async {
-   
     ReviewModel review = ReviewModel(
         productId: product.productId,
         rating: rate,
@@ -220,19 +242,18 @@ class OrderViewModel extends GetxController {
       'review': notes ?? '',
       'date': DateTime.now().toString()
     };
-   
+
     if (reviews.singleWhere((item) => item.orderId == review.orderId,
             orElse: () => null) ==
         null) {
       reviews.add(review);
-      setRate(orderId: orderId, prodId: product.productId,rate:rate );
+      setRate(orderId: orderId, prodId: product.productId, rate: rate);
       update();
     }
     reviews[reviews.indexWhere((item) => item.productId == product.productId)] =
         review;
-        setRate(orderId: orderId, prodId: product.productId,rate:rate );
+    setRate(orderId: orderId, prodId: product.productId, rate: rate);
     update();
-    
 
     DocumentReference reviewRef =
         FirebaseFirestore.instance.collection('reviews').doc(review.productId);
@@ -246,11 +267,12 @@ class OrderViewModel extends GetxController {
     print(review.userName);
     print(reviews.length);
   }
-  setRate({String orderId,String prodId, int rate}){
-    OrderModel order=orders.firstWhere((item)=>item.id==orderId);
-    CartItemModel product=order.products.firstWhere((item)=>item.productId==prodId);
-    product.currentRating=rate;
-    update();
 
+  setRate({String orderId, String prodId, int rate}) {
+    OrderModel order = orders.firstWhere((item) => item.id == orderId);
+    CartItemModel product =
+        order.products.firstWhere((item) => item.productId == prodId);
+    product.currentRating = rate;
+    update();
   }
 }

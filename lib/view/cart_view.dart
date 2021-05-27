@@ -98,7 +98,7 @@ class CartView extends StatelessWidget {
                       text: 'checkout'.toUpperCase(),
                       radius: 10,
                       press: () {
-                        Get.off(CheckoutView());
+                        Get.to(CheckoutView());
                       },
                       height: SizeConfig.defaultSize * 4.5,
                       width: SizeConfig.defaultSize * 15,

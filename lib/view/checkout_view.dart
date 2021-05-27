@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/cart_view_model.dart';
+import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/order_view_model.dart';
-import 'package:safwat_pharmacy/models/cart_item_model.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/cart_view.dart';
+import 'package:safwat_pharmacy/view/custom_widgets/control_view.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_button.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_text.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_title.dart';
 import 'package:safwat_pharmacy/view/order_view.dart';
+import 'package:safwat_pharmacy/view/select_address.dart';
 import 'custom_widgets/custom_card.dart';
 import 'custom_widgets/custom_checkout_item.dart';
 
 class CheckoutView extends StatelessWidget {
   final cartController = Get.put(CartViewModel());
   final orderController = Get.put(OrderViewModel());
+  final addressController = Get.put(MapViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -36,29 +39,70 @@ class CheckoutView extends StatelessWidget {
           Container(
             height: SizeConfig.screenHeight * .77,
             child: ListView(
-              /* physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true, */
               children: [
                 CustomTitle(
                   title: 'Shipping info',
                 ),
                 CustomCard(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.location_on_outlined),
-                      SizedBox(
-                        width: SizeConfig.defaultSize,
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Row(
+                          children: [
+                            Icon(Icons.location_on_outlined),
+                            SizedBox(
+                              width: SizeConfig.defaultSize,
+                            ),
+                            GetBuilder<MapViewModel>(
+                              init: Get.find(),
+                              builder: (controller) => Expanded(
+                                child: Container(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomText(
+                                          text: controller
+                                              .addresses[
+                                                  controller.defaultIndex]
+                                              .name),
+                                      CustomText(
+                                        text: controller
+                                            .addresses[controller.defaultIndex]
+                                            .mobile,
+                                      ),
+                                      CustomText(
+                                        text: controller
+                                            .addresses[controller.defaultIndex]
+                                            .address,
+                                      ),
+                                      CustomText(
+                                        text: controller
+                                            .addresses[controller.defaultIndex]
+                                            .details,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      CustomText(
-                        text: 'Mohamed Safwat\n01030941486\nBanha',
-                      ),
-                      Spacer(),
+
+                      //Spacer(),
                       FlatButton(
+                        textColor: Colors.blue,
                         child: Text(
                           'Change'.toUpperCase(),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(SelectAddress(
+                            radioIndex: addressController.defaultIndex,
+                          ));
+                        },
                       )
                     ],
                   ),
@@ -171,19 +215,25 @@ class CheckoutView extends StatelessWidget {
                   ],
                 ),
                 CustomButton(
-                  press: () {
-                    print(cartController.cartItems[0].productId);
-                    /* String dateTime=DateTime.now().toString();
-                       String orderId =dateTime.substring(0,4)+dateTime.substring(5,7)+dateTime.substring(8,10)+dateTime.substring(20);
-                        print(orderId);
-                        print(DateTime.now().toString());
- */
-                    orderController.addOrder(
-                        address: 'address',
+                  press: () async {
+                  print('beforrrrrrr'+'${orderController.orders.length}');
+
+                    print(cartController.cartItems);
+                   await orderController.addOrder(
+                        address: addressController
+                            .addresses[addressController.defaultIndex],
                         cartProducts: cartController.cartItems,
                         total: cartController.totalPrice);
-                    Get.off(OrderView());
+                        print('afterrrrrrrr'+'${orderController.orders.length}');
+                        print(orderController.orders[0].products[0].name);
                     cartController.clearCart();
+                    Get.back();
+
+                    var response = await Get.to(OrderView());
+                    if (response == 'order') {
+                      
+                      Get.to(ControlView());
+                    }
                   },
                   text: 'Confirm',
                   height: SizeConfig.defaultSize * 5,

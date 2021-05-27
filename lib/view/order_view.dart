@@ -25,12 +25,12 @@ class OrderView extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              Get.back();
+              Get.back(result: 'order');
             },
           ),
         ),
         body: GetBuilder<OrderViewModel>(
-          init: OrderViewModel(),
+          init:Get.find(),
           builder: (controller) => controller.loading.value
               ? Center(
                   child: CircularProgressIndicator(),

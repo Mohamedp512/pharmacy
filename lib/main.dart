@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
 import 'package:safwat_pharmacy/helper/binding.dart';
 import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 import 'package:safwat_pharmacy/theme.dart';
@@ -19,7 +20,7 @@ void main() async {
   Get.put(LocalStoreageData());
   Get.put(ProfileViewModel());
   Get.put(HomeViewModel());
-  //Get.put(ProfileViewModel());
+  Get.put(MapViewModel());
   runApp(MyApp());
 }
 

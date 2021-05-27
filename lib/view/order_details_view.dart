@@ -91,7 +91,7 @@ class OrderDetailsView extends StatelessWidget {
                   Divider(
                     color: Colors.black,
                   ),
-                  Text(order.mobile+'\n'+order.address,style: TextStyle(color: Colors.black),)
+                  Text('${order.address.mobile}\n${order.address.address}',style: TextStyle(color: Colors.black),)
                   /* Row(mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
@@ -199,6 +199,7 @@ class OrderDetailsView extends StatelessWidget {
                       name: order.products[index].name,
                       price: order.products[index].price.toStringAsFixed(2),
                       qty: order.products[index].quantity.toString(),
+                      delivered: order.status,
                     ),
                   ),
                 ],
@@ -217,8 +218,8 @@ class OrderDetailCard extends StatelessWidget {
   final String img;
   final String qty;
   final String price;
-
-  OrderDetailCard({this.name, this.img, this.qty, this.price});
+  final String delivered;
+  OrderDetailCard({this.name, this.img, this.qty, this.price,this.delivered});
 
   @override
   Widget build(BuildContext context) {
@@ -259,14 +260,14 @@ class OrderDetailCard extends StatelessWidget {
               SizedBox(
                 height: SizeConfig.defaultSize,
               ),
-              RaisedButton(
+              delivered=='Delivered'? RaisedButton(
                 onPressed: () {},
                 child: Text(
                   'Return item',
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
-              )
+              ):Container()
             ],
           )
         ],

@@ -1,9 +1,9 @@
 import 'package:safwat_pharmacy/models/cart_item_model.dart';
-import 'package:safwat_pharmacy/models/product_model.dart';
+import 'address_model.dart';
 
 class OrderModel {
   String id;
-  String address;
+  AddressModel address;
   String mobile;
   double total;
   List<CartItemModel> products;
@@ -30,7 +30,7 @@ class OrderModel {
     total = map['total'];
     products = map['products'];
     dateTime = map['dateTime'];
-    status=map['status'];
+    status = map['status'];
   }
   toJson() {
     return {
@@ -40,7 +40,7 @@ class OrderModel {
       'total': total,
       'products': products,
       'dateTime': DateTime.now(),
-      'status':status,
+      'status': status,
     };
   }
 }

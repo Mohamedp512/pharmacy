@@ -4,9 +4,11 @@ import 'package:safwat_pharmacy/core/view_model/account_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
 import 'package:safwat_pharmacy/size_config.dart';
+import 'package:safwat_pharmacy/view/addresses_view.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_text.dart';
 import 'package:safwat_pharmacy/view/favorites_view.dart';
 import 'package:safwat_pharmacy/view/profile_view.dart';
+import 'package:safwat_pharmacy/view/returns_view.dart';
 
 import 'order_view.dart';
 
@@ -72,7 +74,7 @@ class AccountView extends StatelessWidget {
                     ),
                     AccountUserCard(
                       icon: Icons.undo,
-                      title: 'Returns',
+                      title: 'Returns',press: (){Get.to(ReturnsView());},
                     ),
                     AccountUserCard(press: (){Get.to(FavoritesView());},
                       icon: Icons.favorite_border,
@@ -106,7 +108,7 @@ class AccountView extends StatelessWidget {
                             icon: Icons.account_box_outlined,
                             title: 'Profile'),
                         Divider(),
-                        _customListile(icon: Icons.place, title: 'Address'),
+                        _customListile(icon: Icons.place, title: 'Address',press: (){Get.to(AddressessView());}),
                         Divider(),
                         _customListile(
                             icon: Icons.language_outlined, title: 'Language'),

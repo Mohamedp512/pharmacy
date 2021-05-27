@@ -22,10 +22,8 @@ class CartViewModel extends GetxController {
   }
 
   addCartItem(CartItemModel cartItem) async {
-    String userId=FirebaseAuth.instance.currentUser.uid;
+   // String userId=FirebaseAuth.instance.currentUser.uid;
     //await cartRef.doc(userId).set()
-
-
 
     if ((_cartItems.singleWhere((item) => item.name == cartItem.name,
             orElse: () => null)) ==
@@ -95,7 +93,9 @@ class CartViewModel extends GetxController {
 
   clearCart()async{
     _cartItems.clear();
+    _totalPrice=0;
     await dbHelper.deleteCartDatabase();
+    update();
 
   }
 }
