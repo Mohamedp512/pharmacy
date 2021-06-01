@@ -32,7 +32,7 @@ class FavoritesView extends StatelessWidget {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: controller.favoriteProducts.length,
-                  itemBuilder: (context, index) => ProductCard(
+                  itemBuilder: (context, index) => ProductCard(tag:controller.favoriteProducts[index].prodId ,
                     button: true,
                     icon: Icon(Icons.delete,color: Colors.red,),
                     press: (){controller.toggleFavoriteStatus(controller.favoriteProducts[index].prodId);},

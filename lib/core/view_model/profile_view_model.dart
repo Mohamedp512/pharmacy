@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 import 'package:safwat_pharmacy/models/user_model.dart';
@@ -51,7 +51,6 @@ class ProfileViewModel extends GetxController {
   Future uploadImage() async {
     String _filePath = DateTime.now().toString() + '_image.jpg';
 
-    
     try {
       _loading.value = true;
       var uploadTask =
@@ -67,7 +66,6 @@ class ProfileViewModel extends GetxController {
     } on FirebaseException catch (e) {
       print(e);
     }
-    
   }
 
   Future saveImage(String imgUrl) async {
@@ -77,6 +75,7 @@ class ProfileViewModel extends GetxController {
   }
 
   Future<void> deleteImage() async {
+    oldUrl=_user.img;
     if (oldUrl != null) {
       String fileUrl = Uri.decodeFull(Path.basename(oldUrl))
           .replaceAll(new RegExp(r'(\?alt).*'), '');
@@ -96,14 +95,14 @@ class ProfileViewModel extends GetxController {
     update();
   }
 
-  Future<void> updateUserData(String name, String mobile)async{
-    
-     DocumentReference userRef =
+  Future<void> updateUserData(String name, String mobile) async {
+    DocumentReference userRef =
         FirebaseFirestore.instance.collection('Users').doc(user.userId);
-      await userRef.set({'name':name,'mobile':mobile},SetOptions(merge: true));
-      user.name=name;
-      user.mobile=mobile;
-      update();
-      localStoreageData.setUser(user);
+    await userRef
+        .set({'name': name, 'mobile': mobile}, SetOptions(merge: true));
+    user.name = name;
+    user.mobile = mobile;
+    update();
+    localStoreageData.setUser(user);
   }
 }

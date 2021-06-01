@@ -52,7 +52,9 @@ class DetailsView extends GetWidget<HomeViewModel> {
                     height: SizeConfig.defaultSize * 30,
                     width: double.infinity,
                     // color: Colors.red,
-                    child: Image.network(product.img),
+                    child: Hero(
+                      tag: product.prodId,
+                      child: Image.network(product.img)),
                   ),
                   Positioned(
                     top: 0,
@@ -69,52 +71,60 @@ class DetailsView extends GetWidget<HomeViewModel> {
                     ),
                   )
                 ]),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.defaultSize,
-                      vertical: SizeConfig.defaultSize),
-                  child: ListView(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        text: product.enName,
-                        size: SizeConfig.defaultSize * 2.4,
-                        fontWeight: FontWeight.bold,
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 1,end: 0),
+                  duration: Duration(seconds: 1),
+                  curve: Curves.bounceOut,
+                  builder:(context,value,child)=> Transform.translate(
+                    offset: Offset(value*100,0),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.defaultSize,
+                          vertical: SizeConfig.defaultSize),
+                      child: ListView(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: product.enName,
+                            size: SizeConfig.defaultSize * 2.4,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(
+                            height: SizeConfig.defaultSize,
+                          ),
+                          CustomText(
+                            text: product.price.toString() + ' EGP',
+                            size: SizeConfig.defaultSize * 2,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            height: SizeConfig.defaultSize * 3,
+                          ),
+                          CustomText(
+                            text: product.genericName.toUpperCase(),
+                            size: SizeConfig.defaultSize * 2,
+                          ),
+                          SizedBox(
+                            height: SizeConfig.defaultSize,
+                          ),
+                          CustomText(
+                            text: product.description,
+                            size: SizeConfig.defaultSize * 1.8,
+                          ),
+                          SizedBox(
+                            height: SizeConfig.defaultSize,
+                          ),
+                          CustomTitle(
+                            title: 'Similar Products',
+                          ),
+                          _similarProductsList()
+                        ],
                       ),
-                      SizedBox(
-                        height: SizeConfig.defaultSize,
-                      ),
-                      CustomText(
-                        text: product.price.toString() + ' EGP',
-                        size: SizeConfig.defaultSize * 2,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        height: SizeConfig.defaultSize * 3,
-                      ),
-                      CustomText(
-                        text: product.genericName.toUpperCase(),
-                        size: SizeConfig.defaultSize * 2,
-                      ),
-                      SizedBox(
-                        height: SizeConfig.defaultSize,
-                      ),
-                      CustomText(
-                        text: product.description,
-                        size: SizeConfig.defaultSize * 1.8,
-                      ),
-                      SizedBox(
-                        height: SizeConfig.defaultSize,
-                      ),
-                      CustomTitle(
-                        title: 'Similar Products',
-                      ),
-                      _similarProductsList()
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -165,6 +175,7 @@ class DetailsView extends GetWidget<HomeViewModel> {
                                 )));
                   },
                   child: ProductCard(
+                    tag: products[index].prodId,
                     img: products[index].img,
                     name: products[index].enName,
                     price: ((products[index].price)).toString(),

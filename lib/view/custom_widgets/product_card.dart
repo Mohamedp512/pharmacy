@@ -12,6 +12,7 @@ class ProductCard extends StatelessWidget {
   bool button;
   Widget icon;
   Function press;
+  String tag;
 
   ProductCard(
       {this.img,
@@ -19,6 +20,7 @@ class ProductCard extends StatelessWidget {
       this.price,
       this.button = false,
       this.icon,
+      this.tag,
       this.press});
 
   @override
@@ -47,10 +49,13 @@ class ProductCard extends StatelessWidget {
             child: Stack(children: [
               Center(
                   child: img != null
-                      ? Image.network(
-                          img,
-                          fit: BoxFit.contain,
-                        )
+                      ? Hero(
+                        tag: tag,
+                        child: Image.network(
+                            img,
+                            fit: BoxFit.contain,
+                          ),
+                      )
                       : Image.asset('assets/images/no-img.png')),
               Positioned(
                 top: -10,

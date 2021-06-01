@@ -30,7 +30,7 @@ class OrderView extends StatelessWidget {
           ),
         ),
         body: GetBuilder<OrderViewModel>(
-          init:Get.find(),
+          init:Get.put(OrderViewModel()),
           builder: (controller) => controller.loading.value
               ? Center(
                   child: CircularProgressIndicator(),

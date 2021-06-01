@@ -175,6 +175,7 @@ class HomeScreen extends GetWidget<AuthViewModel> {
                       ));
                     },
                     child: ProductCard(
+                      tag: controller.products[index].prodId,
                       img: controller.products[index].img,
                       name: controller.products[index].enName,
                       price: ((controller.products[index].price)).toString(),

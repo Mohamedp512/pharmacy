@@ -5,12 +5,10 @@ import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
 import 'package:safwat_pharmacy/helper/binding.dart';
 import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 import 'package:safwat_pharmacy/theme.dart';
-import 'package:safwat_pharmacy/view/auth/login_screen.dart';
-import 'package:safwat_pharmacy/view/custom_widgets/control_view.dart';
-
+import 'package:safwat_pharmacy/view/splash_view.dart';
 import 'core/view_model/cart_view_model.dart';
 import 'core/view_model/home_view_model.dart';
-import 'core/view_model/order_view_model.dart';
+import 'core/view_model/prescription_view_model.dart';
 import 'core/view_model/profile_view_model.dart';
 
 void main() async {
@@ -21,6 +19,7 @@ void main() async {
   Get.put(ProfileViewModel());
   Get.put(HomeViewModel());
   Get.put(MapViewModel());
+  Get.put(PrescriptionViewModel());
   runApp(MyApp());
 }
 
@@ -33,8 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Safwat Pharmacy',
       initialBinding: Binding(),
       theme: theme(),
-      home: ControlView(),
+      home: SplashView(),
     );
   }
 }
-
