@@ -23,10 +23,10 @@ class CustomButton extends StatelessWidget {
         onPressed: press,
         color: kPrimaryColor,
         child: Text(
-          text,
+          text,textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: fontSize,height: 1
+            fontSize: fontSize,height: 1,
           ),
         ),
         shape: RoundedRectangleBorder(

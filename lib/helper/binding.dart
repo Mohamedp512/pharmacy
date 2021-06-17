@@ -10,6 +10,8 @@ import 'package:safwat_pharmacy/core/view_model/prescription_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
 import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 
+import 'network_controller.dart';
+
 class Binding extends Bindings {
   @override
   void dependencies() {
@@ -22,7 +24,7 @@ class Binding extends Bindings {
     Get.lazyPut(() => LocalStoreageData());
     Get.lazyPut(() => AccountViewModel());
     Get.lazyPut(() => OrderViewModel());
-    //Get.lazyPut(()=>LocalStoreageData());
+    Get.lazyPut<NetworkController>(() => NetworkController());
     Get.lazyPut(() => MapViewModel());
     Get.lazyPut(() => PrescriptionViewModel());
   }

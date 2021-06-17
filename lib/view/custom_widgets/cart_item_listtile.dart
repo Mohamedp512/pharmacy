@@ -30,7 +30,7 @@ class CartItemListtile extends StatelessWidget {
     return GetBuilder<CartViewModel>(
       init: Get.find(),
       builder: (controller) => Dismissible(
-        key: ValueKey('1'),
+        key: UniqueKey(),
         background: Container(
           padding: EdgeInsets.only(right:SizeConfig.defaultSize*2),
           alignment:Alignment.centerRight ,

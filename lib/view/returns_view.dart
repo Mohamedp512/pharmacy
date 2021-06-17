@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 
 import 'custom_widgets/custom_text.dart';
@@ -10,7 +11,7 @@ class ReturnsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
-          text: 'Returns',
+          text: getTranslated(context,'returns'),
           color: kPrimaryColor,
           fontWeight: FontWeight.bold,
           size: SizeConfig.defaultSize * 2,

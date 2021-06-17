@@ -16,7 +16,7 @@ class MapViewModel extends GetxController {
   List<AddressModel> _addresses = [];
   Set<Marker> myMarker = {};
   String currentAddress = 'Cairo';
-  String userId = FirebaseAuth.instance.currentUser.uid;
+  
   Position get currentLocation => _currentLocation;
   Position _currentLocation = Position();
   CollectionReference addressRef =
@@ -40,6 +40,7 @@ class MapViewModel extends GetxController {
   }
 
   Future<void> getAddresses() async {
+  String userId = FirebaseAuth.instance.currentUser.uid;
     _loading.value = true;
     List<AddressModel> _loadedAddresses = [];
     var addresses = await addressRef.doc(userId).get().then((result) {
@@ -93,6 +94,7 @@ class MapViewModel extends GetxController {
   }
 
   saveAddress({AddressModel address}) async {
+    String userId = FirebaseAuth.instance.currentUser.uid;
     String id = DateTime.now().toString().substring(20);
     if ((_addresses.singleWhere((add) => add.address == address.address,
             orElse: () => null)) ==
@@ -131,6 +133,7 @@ class MapViewModel extends GetxController {
   }
 
   deleteAddress(AddressModel selectedAddress) async {
+    String userId = FirebaseAuth.instance.currentUser.uid;
     await addressRef
         .doc(userId)
         .update({selectedAddress.id: FieldValue.delete()});

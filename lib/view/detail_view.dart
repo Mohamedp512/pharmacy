@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/cart_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/home_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/models/cart_item_model.dart';
 import 'package:safwat_pharmacy/models/product_model.dart';
 import 'package:safwat_pharmacy/size_config.dart';
@@ -23,7 +24,7 @@ class DetailsView extends GetWidget<HomeViewModel> {
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
-          text: "Product Details",
+          text: getTranslated(context,'productDetails'),
         ),
         actions: [
           GestureDetector(
@@ -118,9 +119,9 @@ class DetailsView extends GetWidget<HomeViewModel> {
                           SizedBox(
                             height: SizeConfig.defaultSize,
                           ),
-                          CustomTitle(
-                            title: 'Similar Products',
-                          ),
+                           controller.getSimilarProducts(product).length!=0?CustomTitle(
+                            title: getTranslated(context,'similarProducts'),
+                          ):Container(),
                           _similarProductsList()
                         ],
                       ),
@@ -138,7 +139,7 @@ class DetailsView extends GetWidget<HomeViewModel> {
                   vertical: SizeConfig.defaultSize,
                   horizontal: SizeConfig.defaultSize * 2),
               child: CustomButton(
-                text: 'Add to Cart'.toUpperCase(),
+                text: getTranslated(context,'addToCart').toUpperCase(),
                 press: () {
                   controller.addCartItem(CartItemModel(
                       productId: product.prodId,

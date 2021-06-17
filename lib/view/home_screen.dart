@@ -2,20 +2,25 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/auth_view_model.dart';
+import 'package:safwat_pharmacy/core/view_model/cart_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/home_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
+import 'package:safwat_pharmacy/models/cart_item_model.dart';
 import 'package:safwat_pharmacy/size_config.dart';
+import 'package:safwat_pharmacy/view/category_view.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_cat.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_title.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/product_card.dart';
 import 'package:safwat_pharmacy/view/detail_view.dart';
 import 'custom_widgets/custom_text.dart';
 
-class HomeScreen extends GetWidget<AuthViewModel> {
+class HomeScreen extends GetWidget<HomeViewModel> {
+  final CartViewModel cartController = Get.find();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(
-      init: Get.find(),
+      init: HomeViewModel(),
       builder: (controller) => controller.loading.value
           ? Center(
               child: CircularProgressIndicator(),
@@ -89,7 +94,7 @@ class HomeScreen extends GetWidget<AuthViewModel> {
                             height: SizeConfig.defaultSize * 20,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Carousel(
+                              child:controller.carImages().length==0?Center(child:CircularProgressIndicator() ,): Carousel(
                                 showIndicator: true,
                                 indicatorBgPadding: 2,
                                 dotBgColor: Colors.transparent,
@@ -100,14 +105,9 @@ class HomeScreen extends GetWidget<AuthViewModel> {
                                 radius: Radius.circular(10),
                                 animationCurve: Curves.easeInSine,
                                 boxFit: BoxFit.fill,
+                                onImageTap: (index){Get.to(DetailsView(product: controller.getCarouselProduct()[index]));},
                                 //dotColor: kSecondaryColor,dotIncreaseSize: 1.5,
-                                images: [
-                                  AssetImage('assets/images/panadol_night.jpg'),
-                                  AssetImage('assets/images/bep1.png'),
-                                  AssetImage(
-                                      'assets/images/panadol_extra_ad.jpg'),
-                                  AssetImage('assets/images/bep2.jpg')
-                                ],
+                                images: controller.carImages(),
                               ),
                             ),
                           ),
@@ -115,7 +115,7 @@ class HomeScreen extends GetWidget<AuthViewModel> {
                             height: SizeConfig.defaultSize * 2,
                           ),
                           CustomTitle(
-                            title: 'Categories',
+                            title: AppLocale.of(context).getTranslated('category'),
                           ),
                           controller.loading.value
                               ? Center(
@@ -123,7 +123,7 @@ class HomeScreen extends GetWidget<AuthViewModel> {
                                 )
                               : _listViewCategories(),
                           CustomTitle(
-                            title: 'Best Collection',
+                            title: getTranslated(context,'bestCollections'),
                             button: true,
                           ),
                           _listViewProducts(),
@@ -148,9 +148,18 @@ class HomeScreen extends GetWidget<AuthViewModel> {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: controller.categories.length,
-                itemBuilder: (context, index) => CustomCat(
-                  catImg: controller.categories[index].img,
-                  catTitle: controller.categories[index].title,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    controller.getsubCatByCat(
+                        controller.categories[index].categoryId);
+                    Get.to(CategoryView(
+                      indexSelected: index,
+                    ));
+                  },
+                  child: CustomCat(
+                    catImg: controller.categories[index].img,
+                    catTitle: controller.categories[index].title,
+                  ),
                 ),
               ),
             ));
@@ -175,6 +184,15 @@ class HomeScreen extends GetWidget<AuthViewModel> {
                       ));
                     },
                     child: ProductCard(
+                      addFunction: () {
+                        cartController.addCartItem(CartItemModel(
+                          img: controller.products[index].img,
+                          name: controller.products[index].enName,
+                          price: controller.products[index].price,
+                          productId: controller.products[index].prodId,
+                          quantity: 1
+                        ));
+                      },
                       tag: controller.products[index].prodId,
                       img: controller.products[index].img,
                       name: controller.products[index].enName,

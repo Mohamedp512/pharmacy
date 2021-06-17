@@ -9,7 +9,8 @@ import 'package:safwat_pharmacy/view/custom_widgets/custom_text.dart';
 
 class SignUpScreen extends GetWidget<AuthViewModel> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  String name,email,password;
+  AuthViewModel _authController=Get.put(AuthViewModel());
+//  String name,email,password;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -54,8 +55,8 @@ class SignUpScreen extends GetWidget<AuthViewModel> {
                 child: Column(
                   children: [
                     TextFormField(
-                      onSaved: (Value) {
-                        controller.name = Value;
+                      onSaved: (value) {
+                        _authController.name=value;                        
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -69,14 +70,14 @@ class SignUpScreen extends GetWidget<AuthViewModel> {
                           labelText: 'Name',
                           hintText: 'Enter your full name',
                           floatingLabelBehavior: FloatingLabelBehavior.always,
-                          suffixIcon: Icon(Icons.email_outlined)),
+                          suffixIcon: Icon(Icons.person)),
                     ),
                     SizedBox(
                       height: defaultSize * 3,
                     ),
                     TextFormField(
-                      onSaved: (Value) {
-                        controller.email = Value;
+                      onSaved: (value) {
+                        _authController.email = value;
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -97,7 +98,7 @@ class SignUpScreen extends GetWidget<AuthViewModel> {
                     ),
                     TextFormField(
                       onSaved: (value) {
-                        controller.password = value;
+                        _authController.password = value;
                       },
                       validator: (value) {
                         if (value.isEmpty) {
@@ -144,8 +145,9 @@ class SignUpScreen extends GetWidget<AuthViewModel> {
               CustomButton(
                 text: 'SIGN UP',
                 press: () {
-                  _globalKey.currentState.save();
+                 
                   if(_globalKey.currentState.validate()){
+                     _globalKey.currentState.save();
                     controller.creatAccountWitEmailAndPassword();
                   }
                 },

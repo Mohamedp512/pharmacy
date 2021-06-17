@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/services/home_sevice.dart';
+import 'package:safwat_pharmacy/models/carousel_model.dart';
 import 'package:safwat_pharmacy/models/category_model.dart';
 import 'package:safwat_pharmacy/models/product_model.dart';
+import 'package:safwat_pharmacy/models/subCategory_model.dart';
 
 class HomeViewModel extends GetxController {
   ValueNotifier<bool> get loading => _loading;
@@ -12,25 +15,34 @@ class HomeViewModel extends GetxController {
 
   List<CategoryModel> get categories => _categories;
   List<CategoryModel> _categories = [];
+  List<CarouselModel> get carouselPro => _carouselPro;
+  List<CarouselModel> _carouselPro = [];
+  List<SubCategoryModel> get subCategories => _subCategories;
+  List<SubCategoryModel> _subCategories = [];
+  List<SubCategoryModel> selectedSubCats = [];
 
   List<ProductModel> get products => _products;
   List<ProductModel> _products = [];
-  
+  List<ProductModel> productsByCat = [];
 
-  Map<String,dynamic> favData;
+  Map<String, dynamic> favData;
 
   HomeViewModel() {
     getCategories();
     getProducts();
-    
   }
   Future<List<CategoryModel>> getCategories() async {
     _loading.value = true;
     HomeService().getCategories().then((result) {
       for (int i = 0; i < result.length; i++) {
-        _categories.add(CategoryModel.fromJson(result[i].data()));
+        _categories.add(CategoryModel(
+            categoryId: result[i].id,
+            img: result[i].data()['img'],
+            title: result[i].data()['title']));
       }
+      getSubCategories();
       _loading.value = false;
+
       update();
     });
   }
@@ -38,6 +50,7 @@ class HomeViewModel extends GetxController {
   getProducts() async {
     _loading.value = true;
     getFavoriteData();
+    getCarouselData();
     HomeService().getProducts().then((result) {
       if (result != null) {
         for (int i = 0; i < result.length; i++) {
@@ -46,7 +59,9 @@ class HomeViewModel extends GetxController {
             enName: result[i].data()['enName'],
             arName: result[i].data()['arName'],
             category: result[i].data()['category'],
-            description: result[i].data()['description']!=null?result[i].data()['description']:'',
+            description: result[i].data()['description'] != null
+                ? result[i].data()['description']
+                : '',
             img: result[i].data()['img'] != null
                 ? result[i].data()['img']
                 : 'https://firebasestorage.googleapis.com/v0/b/safwat-pharmacy.appspot.com/o/drug-logo.jpg?alt=media&token=c43d91a6-b2b2-42d3-b5ce-aef0c72d192a',
@@ -76,8 +91,42 @@ class HomeViewModel extends GetxController {
       update();
     });
   }
-  List<ProductModel> get favoriteProducts{
-    return _products.where((prod)=>prod.isFavorite).toList();
+
+  List<SubCategoryModel> getsubCatByCat(String catId) {
+    _loading.value = true;
+    List<SubCategoryModel> extractedSubCats = [];
+    extractedSubCats =
+        _subCategories.where((subCat) => subCat.catId == catId).toList();
+    selectedSubCats = extractedSubCats;
+    update();
+    _loading.value = false;
+  }
+
+  findProductsBySubCat(String subCatId) {
+    _loading.value = true;
+    List<ProductModel> result = [];
+    result = _products.where((prod) => prod.subCategory == subCatId).toList();
+
+    productsByCat = result;
+    update();
+    _loading.value = false;
+  }
+
+  List<ProductModel> get favoriteProducts {
+    return _products.where((prod) => prod.isFavorite).toList();
+  }
+
+  Future<List<SubCategoryModel>> getSubCategories() async {
+    HomeService().getSubCategories().then((result) {
+      for (var i = 0; i < result.length; i++) {
+        _subCategories.add(SubCategoryModel(
+            id: result[i].id,
+            catId: result[i].data()['catId'],
+            img: result[i].data()['img'],
+            title: result[i].data()['title']));
+      }
+    });
+    update();
   }
 
   List<ProductModel> getSimilarProducts(ProductModel product) {
@@ -95,12 +144,11 @@ class HomeViewModel extends GetxController {
     DocumentReference userFavRef =
         FirebaseFirestore.instance.collection('userFavorites').doc(userId);
     final product = _products.firstWhere((prod) => prod.prodId == id);
-    product.isFavorite =! product.isFavorite;
+    product.isFavorite = !product.isFavorite;
     print(product.isFavorite);
     update();
     try {
-      await userFavRef
-          .set({id: product.isFavorite}, SetOptions(merge: true));
+      await userFavRef.set({id: product.isFavorite}, SetOptions(merge: true));
     } on FirebaseException catch (e) {
       print(e);
     }
@@ -113,6 +161,32 @@ class HomeViewModel extends GetxController {
     var result = await userFavRef.get();
     favData = result.data();
     update();
-    
+  }
+
+  Future<void> getCarouselData() async {
+    HomeService().getCarouselProducts().then((result) {
+      for (var i = 0; i < result.length; i++) {
+        _carouselPro.add(CarouselModel(
+            img: result[i].data()['img'], proId: result[i].data()['proId']));
+      }
+    });
+    update();
+  }
+
+  List<ProductModel> getCarouselProduct() {
+    List<ProductModel> carouselProducts = [];
+    for (var i = 0; i < _carouselPro.length; i++) {
+      carouselProducts.add(
+          _products.firstWhere((pro) => pro.prodId == carouselPro[i].proId));
+    }
+    return carouselProducts;
+  }
+
+  List<ImageProvider> carImages() {
+    List<ImageProvider> images = [];
+    for (var i = 0; i < _carouselPro.length; i++) {
+      images.add(NetworkImage(carouselPro[i].img));
+    }
+    return images;
   }
 }

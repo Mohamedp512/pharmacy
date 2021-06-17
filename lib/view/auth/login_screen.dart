@@ -123,8 +123,9 @@ class LoginScreen extends GetWidget<AuthViewModel> {
               CustomButton(
                 text: 'SIGN IN',
                 press: () {
-                  _globalKey.currentState.save();
+                  
                   if(_globalKey.currentState.validate()){
+                    _globalKey.currentState.save();
                     controller.signInWitEmailAndPassword();
                   }
                 },

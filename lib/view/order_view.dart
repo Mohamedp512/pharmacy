@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/order_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/models/order_model.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_text.dart';
@@ -15,7 +16,7 @@ class OrderView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
           title: CustomText(
-            text: 'My Order',
+            text: getTranslated(context,'myOrders'),
             color: Colors.white,
           ),
           centerTitle: true,
@@ -26,6 +27,7 @@ class OrderView extends StatelessWidget {
             ),
             onPressed: () {
               Get.back(result: 'order');
+
             },
           ),
         ),
@@ -45,13 +47,13 @@ class OrderView extends StatelessWidget {
                         //shrinkWrap: true,
                         itemCount: controller.orders.length,
                         itemBuilder: (context, index) =>
-                            _orderCard(controller.orders[index]),
+                            _orderCard(controller.orders[index],context),
                       ),
                     ),
         ));
   }
 
-  Widget _orderCard(OrderModel order) {
+  Widget _orderCard(OrderModel order,BuildContext context) {
     return Card(
       elevation: 2,
       child: Container(
@@ -63,7 +65,7 @@ class OrderView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text.rich(
-              TextSpan(text: 'Order ID: ', children: [
+              TextSpan(text: getTranslated(context,'orderId')+': ', children: [
                 TextSpan(
                     text: order.id,
                     style: TextStyle(
@@ -73,7 +75,7 @@ class OrderView extends StatelessWidget {
               ]),
             ),
             Text.rich(
-              TextSpan(text: 'Order Time: ', children: [
+              TextSpan(text:getTranslated(context,'orderTime')+': ', children: [
                 TextSpan(
                     text: DateFormat('dd/MM/yyy hh:mm').format(order.dateTime),
                     style: TextStyle(
@@ -95,7 +97,7 @@ class OrderView extends StatelessWidget {
                       leading: Image.network(order.products[index].img),
                       title: Text(order.products[index].name),
                       subtitle:
-                          Text.rich(TextSpan(text: 'Quantity: ', children: [
+                          Text.rich(TextSpan(text: getTranslated(context,'quantity')+': ', children: [
                         TextSpan(
                             text: order.products[index].quantity.toString(),
                             style: TextStyle(
@@ -111,7 +113,7 @@ class OrderView extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Status'),
+                            Text(getTranslated(context,'status')),
                             Row(
                               children: [
                                 CustomText(
@@ -122,7 +124,7 @@ class OrderView extends StatelessWidget {
                               ],
                             ),
                             CustomText(
-                              text: 'Rate this product',
+                              text: getTranslated(context,'rateProduct'),
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               size: SizeConfig.defaultSize * 1.6,
@@ -184,7 +186,7 @@ class OrderView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'View order details',
+                      getTranslated(context,'viewOrderDetails'),
                       style: TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     ),

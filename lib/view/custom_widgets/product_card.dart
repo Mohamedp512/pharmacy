@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 
 import 'custom_button.dart';
@@ -12,6 +13,7 @@ class ProductCard extends StatelessWidget {
   bool button;
   Widget icon;
   Function press;
+  Function addFunction;
   String tag;
 
   ProductCard(
@@ -21,6 +23,7 @@ class ProductCard extends StatelessWidget {
       this.button = false,
       this.icon,
       this.tag,
+      this.addFunction,
       this.press});
 
   @override
@@ -91,8 +94,8 @@ class ProductCard extends StatelessWidget {
           Center(
             child: CustomButton(
               width: SizeConfig.defaultSize * 14,
-              text: 'Add to Cart',
-              press: () {},
+              text: getTranslated(context,'addToCart'),
+              press: addFunction,
               fontSize: SizeConfig.defaultSize * 1.4,
               height: SizeConfig.defaultSize * 3.5,
             ),

@@ -35,6 +35,7 @@ dependencies:
   google_sign_in: ^4.5.9
   flutter_facebook_login: ^3.0.0
   carousel_pro: ^1.0.0
+  vertical_tabs:
   sqflite:
   shared_preferences: 
   path:
@@ -44,9 +45,14 @@ dependencies:
   google_maps_flutter: 
   geolocator: 
   geocoder: ^0.2.1
+  flutter_phoenix:
+  connectivity:
+  # restart_app:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the
@@ -58,12 +64,14 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/noAddress.png
     - assets/images/
     - assets/icons/
+    - assets/langs/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

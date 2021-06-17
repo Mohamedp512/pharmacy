@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/services/database/cart_database_helper.dart';
+import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 import 'package:safwat_pharmacy/models/cart_item_model.dart';
 
 class CartViewModel extends GetxController {
@@ -13,6 +14,7 @@ class CartViewModel extends GetxController {
   List<CartItemModel> get cartItems => _cartItems;
   double get totalPrice => _totalPrice;
   double _totalPrice = 0.0;
+  LocalStoreageData localStoreageData=Get.put(LocalStoreageData());
   var dbHelper = CartDatabaseHelper.db;
   CollectionReference cartRef=FirebaseFirestore.instance.collection('cart');
 
@@ -33,15 +35,15 @@ class CartViewModel extends GetxController {
       _cartItems.add(cartItem);
       _totalPrice += cartItem.price * cartItem.quantity;
 
-      Get.snackbar('Product Added', 'Product Added to Cart',
+      Get.snackbar(localStoreageData.language!='ar'? 'Product Added':'تم اضافة المنتج', localStoreageData.language!='ar'?'Product Added to Cart':"تم اضافة الصنف الى السلة",
           backgroundColor: Colors.black,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
 
       update();
     } else {
-      Get.snackbar('Item Available', 'Item already available in cart',
-          backgroundColor: Colors.black,
+      Get.snackbar(localStoreageData.language!='ar'?'Item Available':"المنتج موجود", localStoreageData.language!='ar'?'Item already available in cart':"الصنف موجود بالسلة",
+          backgroundColor: Colors.black54,snackStyle: SnackStyle.FLOATING,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
     }

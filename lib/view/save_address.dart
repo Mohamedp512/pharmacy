@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/models/address_model.dart';
 
 import 'package:safwat_pharmacy/size_config.dart';
@@ -26,7 +27,7 @@ class SaveAddress extends StatelessWidget {
         elevation: 0,
         actions: [
           FlatButton(
-            child: Text('Cancel'.toUpperCase()),
+            child: Text(getTranslated(context,'cancel').toUpperCase()),
             onPressed: () {
               Get.back();
             },
@@ -43,7 +44,7 @@ class SaveAddress extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      text: 'Location Information'.toUpperCase(),
+                      text: getTranslated(context,'locationInfo').toUpperCase(),
                       fontWeight: FontWeight.bold,
                       size: SizeConfig.defaultSize * 1.8,
                       color: Colors.grey[800],
@@ -69,7 +70,7 @@ class SaveAddress extends StatelessWidget {
                           width: SizeConfig.defaultSize * 8,
                           child: FlatButton(
                             child: Text(
-                              'Edit',
+                              getTranslated(context,'edit'),
                               style: TextStyle(color: Colors.blue),
                             ),
                             onPressed: () {
@@ -86,7 +87,7 @@ class SaveAddress extends StatelessWidget {
                       height: SizeConfig.defaultSize * 1.2,
                     ),
                     CustomText(
-                      text: 'Additional Address Details',
+                      text: getTranslated(context,'additionalAddressDetails'),
                       color: Colors.grey[800],
                     ),
                     Form(
@@ -95,7 +96,7 @@ class SaveAddress extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           InfoTextField(
-                            hint: 'Where do you want us to drop your order',
+                            hint: getTranslated(context,'dropPlace'),
                             hintStyle: TextStyle(
                                 fontSize: SizeConfig.defaultSize * 1.5),
                             onSave: (value) {
@@ -106,7 +107,7 @@ class SaveAddress extends StatelessWidget {
                             height: SizeConfig.defaultSize * 8,
                           ),
                           CustomText(
-                            text: 'Personal Information'.toUpperCase(),
+                            text: getTranslated(context,'personalInfo').toUpperCase(),
                             fontWeight: FontWeight.bold,
                             size: SizeConfig.defaultSize * 1.8,
                             color: Colors.grey[800],
@@ -116,17 +117,17 @@ class SaveAddress extends StatelessWidget {
                             builder: (cont) => Column(
                               children: [
                                 InfoTextField(
-                                  hint: 'Mobile Number',
+                                  hint: getTranslated(context,'mobile'),
                                   initialValue: mobile,
-                                  label: 'Mobile Number',
+                                  label: getTranslated(context,'mobile'),
                                   onSave: (value) {
                                     mobile = value;
                                   },
                                 ),
                                 InfoTextField(
-                                  hint: 'Name',
+                                  hint: getTranslated(context,'name'),
                                   initialValue: name,
-                                  label: 'Name',
+                                  label: getTranslated(context,'name'),
                                   onSave: (value) {
                                     name = value;
                                   },
@@ -147,7 +148,7 @@ class SaveAddress extends StatelessWidget {
                 child: GetBuilder<MapViewModel>(
                   init: Get.find(),
                   builder: (controller) => CustomButton(
-                    text: 'Save Address'.toUpperCase(),
+                    text: getTranslated(context,'saveAddress').toUpperCase(),
                     press: () {
                       if (globalKey.currentState.validate()) {
                         globalKey.currentState.save();

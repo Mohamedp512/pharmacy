@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_button.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_card.dart';
@@ -15,7 +16,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Profile', style: TextStyle(color: kPrimaryColor)),
+          title: Text(getTranslated(context,'profile'), style: TextStyle(color: kPrimaryColor)),
           centerTitle: true,
           elevation: 1,
           actions: [
@@ -60,7 +61,7 @@ class ProfileView extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       image: controller.image != null
                                           ? FileImage(controller.image)
-                                          : (controller.user.img != null
+                                          : (controller.user.img != null&&controller.user.img!=''
                                               ? NetworkImage(
                                                   controller.user.img)
                                               : AssetImage(
@@ -75,7 +76,7 @@ class ProfileView extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     Get.defaultDialog(
-                                        title: 'Add Image',
+                                        title: getTranslated(context,'addImage'),
                                         content: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -84,7 +85,7 @@ class ProfileView extends StatelessWidget {
                                               height: 10,
                                             ),
                                             FlatButton(
-                                              child: Text('From Camera'),
+                                              child: Text(getTranslated(context,'fromCamera')),
                                               onPressed: () {
                                                 Get.back();
                                                 controller.getImage(
@@ -96,7 +97,7 @@ class ProfileView extends StatelessWidget {
                                               height: 10,
                                             ),
                                             FlatButton(
-                                              child: Text('From Gallery'),
+                                              child: Text(getTranslated(context,'fromGallery')),
                                               onPressed: () {
                                                 Get.back();
                                                 controller.getImage(
@@ -115,7 +116,7 @@ class ProfileView extends StatelessWidget {
                                           Column(
                                             children: [
                                               FlatButton(
-                                                child: Text('Cancel'),
+                                                child: Text(getTranslated(context,'cancel')),
                                                 onPressed: () {
                                                   Get.back();
                                                 },
@@ -158,38 +159,40 @@ class ProfileView extends StatelessWidget {
                         alignment: Alignment.topRight,
                         child: FlatButton(
                           child: CustomText(
-                            text: 'Edit',
+                            text: getTranslated(context,'edit'),
                             color: Colors.blue,
                           ),
                           onPressed: () {
                             Get.bottomSheet(
                               Container(
                                 padding: EdgeInsets.all(SizeConfig.defaultSize),
-                                child: Form(
+                                child: Form(  
                                   key: globalKey,
-                                  child: Column(
-                                    children: [
-                                      UpdateUserTextField(
-                                        label: 'Full Name',
-                                        initialValue: controller.user.name,
-                                        onSave: (value){name=value;},
-                                      ),
-                                      UpdateUserTextField(
-                                        initialValue: controller.user.mobile,
-                                        label: 'Mobile',
-                                        inputType: TextInputType.phone,
-                                        onSave: (value){mobile=value;},
-                                      ),
-                                      SizedBox(height: SizeConfig.defaultSize*2,),
-                                      CustomButton(text: 'Save',press: ()async{
-                                        if(globalKey.currentState.validate()){
-                                          globalKey.currentState.save();
-                                          await controller.updateUserData(name,mobile);
-                                          Get.back();
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        UpdateUserTextField(
+                                          label: getTranslated(context,'fullName'),
+                                          initialValue: controller.user.name,
+                                          onSave: (value){name=value;},
+                                        ),
+                                        UpdateUserTextField(
+                                          initialValue: controller.user.mobile,
+                                          label: getTranslated(context,'mobile'),
+                                          inputType: TextInputType.phone,
+                                          onSave: (value){mobile=value;},
+                                        ),
+                                        SizedBox(height: SizeConfig.defaultSize*2,),
+                                        CustomButton(text: getTranslated(context,'save'),press: ()async{
+                                          if(globalKey.currentState.validate()){
+                                            globalKey.currentState.save();
+                                            await controller.updateUserData(name,mobile);
+                                            Get.back();
 
-                                        }
-                                      },)
-                                    ],
+                                          }
+                                        },)
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 height: SizeConfig.defaultSize * 26,
@@ -214,7 +217,7 @@ class ProfileView extends StatelessWidget {
                           children: [
                             ListTile(
                               leading: Icon(Icons.person),
-                              title: Text('Full Name'),
+                              title: Text(getTranslated(context,'fullName')),
                               subtitle: CustomText(
                                 text: controller.user.name,
                                 size: SizeConfig.defaultSize * 2,
@@ -225,7 +228,7 @@ class ProfileView extends StatelessWidget {
                             Divider(),
                             ListTile(
                               leading: Icon(Icons.call),
-                              title: Text('Mobile'),
+                              title: Text(getTranslated(context,'mobile')),
                               subtitle: CustomText(
                                 text: controller.user.mobile,
                                 size: SizeConfig.defaultSize * 2,

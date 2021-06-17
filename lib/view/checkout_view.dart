@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/cart_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/order_view_model.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/size_config.dart';
+import 'package:safwat_pharmacy/view/add_address_view.dart';
 import 'package:safwat_pharmacy/view/cart_view.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/control_view.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_button.dart';
@@ -24,7 +26,7 @@ class CheckoutView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
-          text: 'Checkout'.toUpperCase(),
+          text: getTranslated(context, 'checkOut').toUpperCase(),
           size: SizeConfig.defaultSize * 2.2,
         ),
         leading: IconButton(
@@ -41,78 +43,102 @@ class CheckoutView extends StatelessWidget {
             child: ListView(
               children: [
                 CustomTitle(
-                  title: 'Shipping info',
+                  title: getTranslated(context, 'shippingInfo'),
                 ),
-                CustomCard(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on_outlined),
-                            SizedBox(
-                              width: SizeConfig.defaultSize,
-                            ),
-                            GetBuilder<MapViewModel>(
-                              init: Get.find(),
-                              builder: (controller) => Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CustomText(
-                                          text: controller
-                                              .addresses[
-                                                  controller.defaultIndex]
-                                              .name),
-                                      CustomText(
-                                        text: controller
-                                            .addresses[controller.defaultIndex]
-                                            .mobile,
+                GetBuilder<MapViewModel>(
+                  init: Get.put(MapViewModel()),
+                  builder: (controller) => CustomCard(
+                    child: addressController.addresses.length == 0
+                        ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(
+                                text: 'No Address Available',
+                              ),
+                              FlatButton(
+                                child: CustomText(
+                                  text: 'Add',
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () {
+                                  Get.to(AddAddressView());
+                                },
+                              )
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.location_on_outlined),
+                                    SizedBox(
+                                      width: SizeConfig.defaultSize,
+                                    ),
+                                    GetBuilder<MapViewModel>(
+                                      init: Get.find(),
+                                      builder: (controller) => Expanded(
+                                        child: Container(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CustomText(
+                                                  text: controller
+                                                      .addresses[controller
+                                                          .defaultIndex]
+                                                      .name),
+                                              CustomText(
+                                                text: controller
+                                                    .addresses[
+                                                        controller.defaultIndex]
+                                                    .mobile,
+                                              ),
+                                              CustomText(
+                                                text: controller
+                                                    .addresses[
+                                                        controller.defaultIndex]
+                                                    .address,
+                                              ),
+                                              CustomText(
+                                                text: controller
+                                                    .addresses[
+                                                        controller.defaultIndex]
+                                                    .details,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
-                                      CustomText(
-                                        text: controller
-                                            .addresses[controller.defaultIndex]
-                                            .address,
-                                      ),
-                                      CustomText(
-                                        text: controller
-                                            .addresses[controller.defaultIndex]
-                                            .details,
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
 
-                      //Spacer(),
-                      FlatButton(
-                        textColor: Colors.blue,
-                        child: Text(
-                          'Change'.toUpperCase(),
-                        ),
-                        onPressed: () {
-                          Get.to(SelectAddress(
-                            radioIndex: addressController.defaultIndex,
-                          ));
-                        },
-                      )
-                    ],
+                              //Spacer(),
+                              FlatButton(
+                                textColor: Colors.blue,
+                                child: Text(
+                                  getTranslated(context, 'change')
+                                      .toUpperCase(),
+                                ),
+                                onPressed: () {
+                                  Get.to(SelectAddress(
+                                    radioIndex: addressController.defaultIndex,
+                                  ));
+                                },
+                              )
+                            ],
+                          ),
                   ),
                 ),
                 SizedBox(
                   height: SizeConfig.defaultSize * 2,
                 ),
                 CustomTitle(
-                  title: 'Cart Items',
-                  buttonText: 'Edit Cart',
+                  title: getTranslated(context, 'cartItems'),
+                  buttonText: getTranslated(context, 'edit'),
                   press: () {
                     Get.back();
                   },
@@ -152,7 +178,12 @@ class CheckoutView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomText(
-                              text: 'Item total:\nDiscount:\nShipping:',
+                              text: getTranslated(context, 'itemTotal') +
+                                  ': \n' +
+                                  getTranslated(context, 'discount') +
+                                  ': \n' +
+                                  getTranslated(context, 'shipping') +
+                                  ': ',
                             ),
                             Text(
                               '${controller.totalPrice}\n0\n0',
@@ -164,7 +195,7 @@ class CheckoutView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomText(
-                              text: 'Total',
+                              text: getTranslated(context, 'total'),
                             ),
                             CustomText(
                               text: controller.totalPrice.toString(),
@@ -201,7 +232,7 @@ class CheckoutView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
-                      text: 'Total'.toUpperCase(),
+                      text: getTranslated(context, 'total').toUpperCase(),
                       size: SizeConfig.defaultSize * 1.8,
                     ),
                     GetBuilder<CartViewModel>(
@@ -216,26 +247,27 @@ class CheckoutView extends StatelessWidget {
                 ),
                 CustomButton(
                   press: () async {
-                  print('beforrrrrrr'+'${orderController.orders.length}');
-
-                    print(cartController.cartItems);
-                   await orderController.addOrder(
+                    if(addressController.addresses.length!=0){
+                      await orderController.addOrder(
                         address: addressController
                             .addresses[addressController.defaultIndex],
                         cartProducts: cartController.cartItems,
                         total: cartController.totalPrice);
-                        print('afterrrrrrrr'+'${orderController.orders.length}');
-                        print(orderController.orders[0].products[0].name);
+
                     cartController.clearCart();
                     Get.back();
 
                     var response = await Get.to(OrderView());
                     if (response == 'order') {
-                      
                       Get.to(ControlView());
                     }
+                    }else{
+                      Get.defaultDialog(
+                        title: 'No Address Avaialble',content: CustomText(text: 'Please Add An Address',size: SizeConfig.defaultSize*1.8,));
+                    }
+                    
                   },
-                  text: 'Confirm',
+                  text: getTranslated(context, 'confirm'),
                   height: SizeConfig.defaultSize * 5,
                   width: SizeConfig.defaultSize * 12,
                   radius: 5,

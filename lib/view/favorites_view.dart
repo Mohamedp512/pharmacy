@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/home_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_text.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/product_card.dart';
@@ -12,7 +13,7 @@ class FavoritesView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
-          text: 'Favorites',
+          text: getTranslated(context,'favorites'),
           color: kPrimaryColor,
           fontWeight: FontWeight.bold,
           size: SizeConfig.defaultSize * 2,

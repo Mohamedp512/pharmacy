@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/cart_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/home_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/models/cart_item_model.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/checkout_view.dart';
@@ -20,7 +21,7 @@ class CartView extends StatelessWidget {
       builder:(controller)=> Scaffold(
         appBar: AppBar(
           title: CustomText(
-            text: 'Cart',
+            text: getTranslated(context,'cart'),
             size: SizeConfig.defaultSize * 2.2,
           ),
           centerTitle: true,
@@ -76,7 +77,7 @@ class CartView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        text: '  Total'.toUpperCase(),
+                        text: getTranslated(context,'total').toUpperCase(),
                         color: kSecondaryColor,
                       ),
                       GetBuilder<CartViewModel>(
@@ -95,7 +96,7 @@ class CartView extends StatelessWidget {
                       BoxShadow(blurRadius: 0.5, color: Colors.black38),
                     ], borderRadius: BorderRadius.circular(10)),
                     child: CustomButton(
-                      text: 'checkout'.toUpperCase(),
+                      text: getTranslated(context,'checkOut').toUpperCase(),
                       radius: 10,
                       press: () {
                         Get.to(CheckoutView());

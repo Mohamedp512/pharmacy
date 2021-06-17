@@ -5,6 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../costants.dart';
 
 class LocalStoreageData extends GetxController {
+ 
+String language;
+
+LocalStoreageData(){
+getLanguage();
+}   
   Future<UserModel> get getuserData async {
     try {
       UserModel user = await _getUserData();
@@ -27,8 +33,29 @@ class LocalStoreageData extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(CACHED_USER_DATA, json.encode(user.toJson()));
   }
-  void deleteUser()async{
+
+  void deleteUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
+  }
+
+  setLanguage(String langCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lang', langCode);
+    language=langCode;
+    getLanguage();
+    update();
+    
+  }
+
+  getLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+      String langCode =  prefs.getString('lang');
+     
+      language=langCode;
+
+      update();
+   
+    
   }
 }

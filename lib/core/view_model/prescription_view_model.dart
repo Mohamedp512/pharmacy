@@ -16,7 +16,7 @@ class PrescriptionViewModel extends GetxController {
   List<PrescriptionModel> _prescriptions = [];
   CollectionReference _prescRef =
       FirebaseFirestore.instance.collection('prescriptions');
-  String userId = FirebaseAuth.instance.currentUser.uid;
+  
   File get prescImage => _prescImage;
   File _prescImage;
   final picker = ImagePicker();
@@ -32,6 +32,8 @@ class PrescriptionViewModel extends GetxController {
 
  
   Future<List<PrescriptionModel>> getPrescriptions() async {
+  String userId = FirebaseAuth.instance.currentUser.uid;
+
     List<PrescriptionModel> _loadedPrescriptions = [];
     _loading.value = true;
     var userPresc = await _prescRef.doc(userId).get().then((result) {
@@ -62,6 +64,7 @@ class PrescriptionViewModel extends GetxController {
   }
 
   Future<void> addPrescription(PrescriptionModel prescription) async {
+    String userId = FirebaseAuth.instance.currentUser.uid;
     _loading.value = true;
     String dateTime = DateTime.now().toString();
     String prescId = userId.substring(0, 5) +
@@ -140,6 +143,7 @@ class PrescriptionViewModel extends GetxController {
   }
 
   Future saveImage(String imgUrl,) async {
+String userId = FirebaseAuth.instance.currentUser.uid;
     DocumentReference user =
         FirebaseFirestore.instance.collection('prescriptions').doc(userId);
     await user.set({'img': imgUrl}, SetOptions(merge: true));

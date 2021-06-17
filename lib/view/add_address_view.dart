@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
 import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_button.dart';
 import 'package:safwat_pharmacy/view/save_address.dart';
@@ -30,7 +28,7 @@ class AddAddressView extends StatelessWidget {
         elevation: 0,
         actions: [
           FlatButton(
-            child: Text('Cancel'.toUpperCase()),
+            child: Text(getTranslated(context,'cancel').toUpperCase()),
             onPressed: () {
               Get.back();
             },
@@ -118,7 +116,7 @@ class AddAddressView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: CustomButton(
-              text: 'Confirm Location'.toUpperCase(),
+              text: getTranslated(context,'confirmLocation').toUpperCase(),
               press: ()async {
                 var response=await Get.to(SaveAddress(
                   address: mapController.currentAddress,

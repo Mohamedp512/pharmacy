@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safwat_pharmacy/core/view_model/map_view_model.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
 import 'package:safwat_pharmacy/view/add_address_view.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_button.dart';
 import 'package:safwat_pharmacy/view/save_address.dart';
@@ -15,7 +16,7 @@ class AddressessView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: CustomText(
-          text: 'Shipping Address',
+          text: getTranslated(context,'shippingAddress'),
           color: kPrimaryColor,
           fontWeight: FontWeight.bold,
           size: SizeConfig.defaultSize * 2,
@@ -28,7 +29,7 @@ class AddressessView extends StatelessWidget {
         children: [
           Expanded(
               child: GetBuilder<MapViewModel>(
-                  init: Get.find(),
+                  init: Get.put(MapViewModel()),
                   builder: (controller) => controller.loading.value
                       ? Center(
                           child: CircularProgressIndicator(),
@@ -62,7 +63,7 @@ class AddressessView extends StatelessWidget {
                                                   size: SizeConfig.defaultSize *
                                                       2,
                                                 ),
-                                                Text('Edit'),
+                                                Text(getTranslated(context,'edit')),
                                               ],
                                             ),
                                             onPressed: () {
@@ -86,7 +87,7 @@ class AddressessView extends StatelessWidget {
                                                   size: SizeConfig.defaultSize *
                                                       2,
                                                 ),
-                                                Text('Delete'),
+                                                Text(getTranslated(context,'delete')),
                                               ],
                                             ),
                                             onPressed: () {
@@ -105,7 +106,7 @@ class AddressessView extends StatelessWidget {
                                         children: [
                                           Row(
                                             children: [
-                                              Text('Name'),
+                                              Text(getTranslated(context,'name')),
                                               SizedBox(
                                                 width:
                                                     SizeConfig.defaultSize * 5,
@@ -125,7 +126,7 @@ class AddressessView extends StatelessWidget {
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  'Address',
+                                                  getTranslated(context,'address'),
                                                   overflow: TextOverflow.fade,
                                                 ),
                                                 SizedBox(
@@ -146,7 +147,7 @@ class AddressessView extends StatelessWidget {
                                           ),
                                           Row(
                                             children: [
-                                              Text('Mobile'),
+                                              Text(getTranslated(context,'mobile')),
                                               SizedBox(
                                                 width: SizeConfig.defaultSize *
                                                     4.5,
@@ -176,7 +177,7 @@ class AddressessView extends StatelessWidget {
               press: () {
                 Get.to(AddAddressView());
               },
-              text: 'Add New Address',
+              text: getTranslated(context,'addNewAddress'),
             ),
           )
         ],

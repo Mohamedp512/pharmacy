@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:safwat_pharmacy/core/services/firestore_user.dart';
+import 'package:safwat_pharmacy/core/view_model/profile_view_model.dart';
 import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 import 'package:safwat_pharmacy/models/user_model.dart';
 import 'package:safwat_pharmacy/view/auth/login_screen.dart';
@@ -17,6 +18,7 @@ class AuthViewModel extends GetxController {
   Rx<User> _user = Rx<User>();
   String get user => _user.value?.email;
   LocalStoreageData localStoreageData = Get.find();
+  ProfileViewModel profileViewModel = Get.find();
 
   @override
   void onInit() {
@@ -44,7 +46,7 @@ class AuthViewModel extends GetxController {
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken);
     await _auth.signInWithCredential(credential).then((user) async {
-      saveUser(user);
+      await saveUser(user);
     });
     Get.back();
     Get.offAll(ControlView());
@@ -57,7 +59,7 @@ class AuthViewModel extends GetxController {
     if (result.status == FacebookLoginStatus.loggedIn) {
       final faceCredential = FacebookAuthProvider.credential(accessToken);
       await _auth.signInWithCredential(faceCredential).then((user) async {
-        saveUser(user);
+        await saveUser(user);
       });
       Get.back();
       Get.offAll(ControlView());
@@ -84,7 +86,7 @@ class AuthViewModel extends GetxController {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((user) async {
-        saveUser(user);
+        await saveUser(user);
       });
 
       Get.offAll(ControlView());
@@ -97,17 +99,20 @@ class AuthViewModel extends GetxController {
   void signOut() async {
     Get.dialog(Center(child: CircularProgressIndicator()));
     await _auth.signOut();
+    await localStoreageData.deleteUser();
     Get.back();
     Get.offAll(LoginScreen());
   }
 
   void saveUser(UserCredential user) async {
+   
     UserModel userModel = UserModel(
       userId: user.user.uid,
       email: user.user.email,
       name: name == null ? user.user.displayName : name,
-     // img: user.user.photoURL!=null?user.user.photoURL:'',
+      img: user.user.photoURL!=null?user.user.photoURL:'',
     );
+   
     await FireStoreUser().addUser(userModel);
     setUser(userModel);
   }
@@ -120,5 +125,6 @@ class AuthViewModel extends GetxController {
 
   setUser(UserModel user) async {
     await localStoreageData.setUser(user);
+  profileViewModel.getCurrentUser();
   }
 }

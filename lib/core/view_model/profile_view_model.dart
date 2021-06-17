@@ -31,6 +31,7 @@ class ProfileViewModel extends GetxController {
   Future<void> getCurrentUser() async {
     _loading.value = true;
     await localStoreageData.getuserData.then((value) {
+      print(value);
       _user = value;
     });
     _loading.value = false;
@@ -50,7 +51,7 @@ class ProfileViewModel extends GetxController {
 
   Future uploadImage() async {
     String _filePath = DateTime.now().toString() + '_image.jpg';
-
+if(_image!=null){
     try {
       _loading.value = true;
       var uploadTask =
@@ -58,13 +59,15 @@ class ProfileViewModel extends GetxController {
       String url = await uploadTask.ref.getDownloadURL();
       await saveImage(url);
       _user.img = url;
-      await deleteImage();
+      //await deleteImage();
       oldUrl = url;
       print(url);
       update();
       _loading.value = false;
     } on FirebaseException catch (e) {
       print(e);
+    }}else{
+      Get.snackbar('No Photo', 'No Photo added');
     }
   }
 

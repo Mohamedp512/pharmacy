@@ -3,23 +3,26 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:safwat_pharmacy/costants.dart';
+import 'package:safwat_pharmacy/helper/app_locale.dart';
+import 'package:safwat_pharmacy/helper/local_storage_data.dart';
 import 'package:safwat_pharmacy/models/order_model.dart';
 import 'package:safwat_pharmacy/size_config.dart';
 import 'package:safwat_pharmacy/view/custom_widgets/custom_text.dart';
 
 class OrderDetailsView extends StatelessWidget {
   final OrderModel order;
-
+  LocalStoreageData localStoreageData=Get.find();
   OrderDetailsView({this.order});
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
         title: Text(
-          'Order Details',
+          getTranslated(context,'orderDetails'),
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -48,7 +51,7 @@ class OrderDetailsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text.rich(
-                    TextSpan(text: 'Order ID: ', children: [
+                    TextSpan(text: getTranslated(context,'orderId')+': ', children: [
                       TextSpan(
                           text: order.id,
                           style: TextStyle(
@@ -58,7 +61,7 @@ class OrderDetailsView extends StatelessWidget {
                     ]),
                   ),
                   Text.rich(
-                    TextSpan(text: 'Order Time: ', children: [
+                    TextSpan(text: getTranslated(context,'orderTime')+': ', children: [
                       TextSpan(
                           text: DateFormat('dd/MM/yyy hh:mm')
                               .format(order.dateTime),
@@ -69,7 +72,7 @@ class OrderDetailsView extends StatelessWidget {
                     ]),
                   ),
                   Text.rich(
-                    TextSpan(text: 'Total: ', children: [
+                    TextSpan(text: getTranslated(context,'total')+": ", children: [
                       TextSpan(
                           text: order.total.toStringAsFixed(2) + ' LE',
                           style: TextStyle(
@@ -79,9 +82,9 @@ class OrderDetailsView extends StatelessWidget {
                     ]),
                   ),
                   Text.rich(
-                    TextSpan(text: 'Payment method: ', children: [
+                    TextSpan(text: getTranslated(context,'paymentMethod')+': ', children: [
                       TextSpan(
-                          text: 'Cash',
+                          text: getTranslated(context,'cash'),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               height: 1.5,
@@ -109,9 +112,9 @@ class OrderDetailsView extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                   horizontal: SizeConfig.defaultSize,
                   vertical: SizeConfig.defaultSize * 2),
-              alignment: Alignment.centerLeft,
+              alignment:localStoreageData.language!='ar'?Alignment.centerLeft:Alignment.centerRight,
               child: CustomText(
-                text: 'Shipment Details',
+                text: getTranslated(context,'shipmentDetails'),
                 color: Colors.blue,
                 fontWeight: FontWeight.bold,
                 size: SizeConfig.defaultSize * 1.8,
@@ -131,7 +134,7 @@ class OrderDetailsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text.rich(
-                    TextSpan(text: 'Shipment Status\n', children: [
+                    TextSpan(text: getTranslated(context,'shipmentStauts')+'\n', children: [
                       TextSpan(
                           text: order.status,
                           style: TextStyle(
@@ -155,16 +158,16 @@ class OrderDetailsView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'InProcessing',
+                          getTranslated(context,'InProcess'),
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.defaultSize * 1.4),
                         ),
-                        Text('Shipped    ',
+                        Text(getTranslated(context,'shipped')+'   ',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.defaultSize * 1.4)),
-                        Text('Delivered ',
+                        Text(getTranslated(context,'delivered'),
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: SizeConfig.defaultSize * 1.4))
@@ -172,7 +175,7 @@ class OrderDetailsView extends StatelessWidget {
                     ),
                   ),
                   Text.rich(
-                    TextSpan(text: 'Shipment Fees: \n', children: [
+                    TextSpan(text: getTranslated(context,'shipmentFees')+'\n', children: [
                       TextSpan(
                           text: '0.00 LE',
                           style: TextStyle(
@@ -247,7 +250,7 @@ class OrderDetailCard extends StatelessWidget {
                 name,
                 style: TextStyle(color: Colors.black),
               ),
-              Text('Qty:' + qty,
+              Text(getTranslated(context,'quantity')+': ' + qty,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       height: 1.5,
@@ -263,7 +266,7 @@ class OrderDetailCard extends StatelessWidget {
               delivered=='Delivered'? RaisedButton(
                 onPressed: () {},
                 child: Text(
-                  'Return item',
+                  getTranslated(context,'returnItem'),
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
